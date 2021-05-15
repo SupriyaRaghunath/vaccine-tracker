@@ -54,6 +54,30 @@ class Request extends Component {
   onDistrictChange = (event) => {
     this.setState({ selectedDistrict: event.target.value }, this.getSessions);
   };
+  
+  notifyMe = () => {
+    let notifTitle = 'Slots Available',
+    notifBody='Vaccine Slots are avilable. Hurry up!'
+
+    if (!Notification) {
+      alert("Desktop notifications not available in your browser");
+      return;
+    }
+
+    if (Notification.permission !== "granted")
+      Notification.requestPermission();
+    else {
+      const notification = new Notification(notifTitle, {
+        icon:
+          "https://socoemergency.org/wp-content/uploads/2020/11/icon-vaccine.png",
+        body: notifBody,
+      });
+      notification.onclick = function () {
+        window.focus();
+        this.close();
+      };
+    }
+  }
 
   render() {
     let renderState = (state) => {
@@ -111,6 +135,7 @@ class Request extends Component {
               </select>
             )}
         </p>
+        <button onClick={this.notifyMe}>Press Here</button>
       </div>
     );
   }
