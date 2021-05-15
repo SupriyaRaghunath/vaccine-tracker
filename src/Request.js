@@ -65,9 +65,10 @@ class Request extends Component {
       total_45 += availability_45;
     }
 
-    if (_finalCenters.length)
+    if (_finalCenters.length) {
+      this.notifyMe();
       this.setState({ finalCenters: _finalCenters, total_18, total_45 });
-    else {
+    } else {
       this.setState({ finalCenters: null });
     }
   };
@@ -130,7 +131,8 @@ class Request extends Component {
     else {
       this.playBeep();
       const notification = new Notification(notifTitle, {
-        icon: "https://socoemergency.org/wp-content/uploads/2020/11/icon-vaccine.png",
+        icon:
+          "https://socoemergency.org/wp-content/uploads/2020/11/icon-vaccine.png",
         body: notifBody,
       });
       notification.onclick = function () {
@@ -204,8 +206,6 @@ class Request extends Component {
               </div>
             )}
         </p>
-
-        <button onClick={this.notifyMe}>Press Here</button>
         <p>
           {renderCheckboxWithLabel(age1)}
           {renderCheckboxWithLabel(age2)}
