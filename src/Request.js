@@ -141,6 +141,7 @@ class Request extends Component {
               </select>
             )}
         </p>
+        <button onClick={this.notifyMe}>Press Here</button>
       </div>
     );
   }
