@@ -46,6 +46,7 @@ class Request extends Component {
 				});
 		}, 30 * 1000);
 	};
+ 
 
 	onStateChange = (event) => {
 		this.setState({ selectedState: event.target.value }, this.getDistricts);
