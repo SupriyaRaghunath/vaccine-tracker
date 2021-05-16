@@ -97,7 +97,12 @@ class Request extends Component {
     if (!this.state.start) {
       this.state.intervalId = this.fetch(today);
     } else {
-      setInterval(() => {
+      let notifyTimer = setInterval(() => {
+        if(!this.state.start){
+          clearInterval(notifyTimer)
+          return
+        }
+
         if (
           !(
             (this.state.ages.includes(EIGHTEEN) && this.state.total_18 > 0) ||
@@ -157,8 +162,7 @@ class Request extends Component {
     else {
       this.playBeep();
       const notification = new Notification(notifTitle, {
-        icon:
-          "https://socoemergency.org/wp-content/uploads/2020/11/icon-vaccine.png",
+        icon: "https://socoemergency.org/wp-content/uploads/2020/11/icon-vaccine.png",
         body: notifBody,
       });
       notification.onclick = function () {
@@ -170,6 +174,10 @@ class Request extends Component {
 
   start = () => {
     this.setState({ start: true }, this.getSessions);
+  };
+
+  stop = () => {
+    this.setState({ start: false });
   };
 
   render() {
@@ -242,9 +250,15 @@ class Request extends Component {
         </p>
         {this.state.ages && (
           <p>
-            <button type="button" onClick={this.start}>
-              {this.state.start ? "Notifier Started" : "Start Notifier"}
-            </button>
+            {this.state.start ? (
+              <button type="button" onClick={this.stop}>
+                Stop Notifier
+              </button>
+            ) : (
+              <button type="button" onClick={this.start}>
+                Start Notifier
+              </button>
+            )}
           </p>
         )}
         <p>
