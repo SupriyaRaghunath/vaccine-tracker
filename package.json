@@ -35,5 +35,15 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "maintainers": [
+    {
+      "name": "Supriya PR",
+      "email": "supriya.raghunath96@gmail.com"
+    },
+    {
+      "name": "Sahil Hussain",
+      "email": "sahil.hussain113@gmail.com"
+    }
+  ]
 }
