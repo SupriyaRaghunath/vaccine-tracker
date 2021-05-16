@@ -158,8 +158,8 @@ class Request extends Component {
   };
 
   playBeep = () => {
-    var tone = new Audio(tone);
-    tone.play()
+    var Tone= new Audio(tone);
+    Tone.play()
   };
 
   notifyMe = () => {
