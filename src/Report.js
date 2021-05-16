@@ -7,9 +7,9 @@ class Report extends Component {
 
       return (
         <tr>
-          <td>{`${name}, ${address}`}</td>
-          <td>{pincode}</td>
-          <td>
+          <td style={{ border: "1px solid white" }}>{`${name}, ${address}`}</td>
+          <td style={{ border: "1px solid white" }}>{pincode}</td>
+          <td style={{ border: "1px solid white" }}>
             {availability_18 && (
               <tr>
                 <td>18</td>
@@ -21,11 +21,11 @@ class Report extends Component {
               </tr>
             )}
           </td>
-          <td>
+          <td style={{ border: "1px solid white" }}>
             <tr>
               <td>{availability_18}</td>
             </tr>
-            <tr>
+            <tr style={{ border: "1px solid white" }}>
               <td>{availability_45}</td>
             </tr>
           </td>
@@ -37,7 +37,7 @@ class Report extends Component {
   };
   render() {
     return (
-      <table id="students">
+      <table id="Centers" style={{ border: "1px solid white" }}>
         <thead>
           <tr>
             <th>Center</th>
