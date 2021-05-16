@@ -182,14 +182,11 @@ class Request extends Component {
             "https://socoemergency.org/wp-content/uploads/2020/11/icon-vaccine.png",
           body: notifBody,
         });
+        notification.onclick = function () {
+          window.focus();
+          this.close();
+        };
       } catch (e) {}
-
-      notification
-        ? (notification.onclick = function () {
-            window.focus();
-            this.close();
-          })
-        : null;
     }
   };
 
