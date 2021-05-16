@@ -10,9 +10,13 @@ class App extends Component {
           <h1>Vaccine Slot Tracker</h1>
           <p>
             <label style={{ fontWeight: 75, fontSize: 20 }}>
-              Find available slots for your vaccination. If there are not slots,
-              don't worry! we've got your back. Start notifier and make sure you
-              don't close this tab. We'll notify when there are available slots.
+              Find available slots for your vaccination. If there are no slots,
+              don't worry! we've got your back. We'll notify when there are
+              available slots.
+            </label>
+            <br />
+            <label style={{ fontWeight: 10, fontSize: 20 }}>
+              'Start Notifier' and make sure you don't close this tab.
             </label>
           </p>
           <p>
