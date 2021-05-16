@@ -14,6 +14,7 @@ class Request extends Component {
     super(props);
     this.state = {
       ages: ["18", "45"],
+      start: false,
     };
   }
 
@@ -73,6 +74,14 @@ class Request extends Component {
     }
   };
 
+  fetch = (today) => {
+    fetch(sessions + this.state.selectedDistrict + "&date=" + today)
+      .then((response) => response.json())
+      .then((data) => {
+        this.checkAvailability(data);
+      });
+  };
+
   getSessions = () => {
     let today = new Date();
     var dd = String(today.getDate()).padStart(2, "0");
@@ -81,34 +90,46 @@ class Request extends Component {
 
     today = dd + "-" + mm + "-" + yyyy;
 
-    setInterval(() => {
-      if (
-        !(
-          (this.state.ages.includes(EIGHTEEN) && this.state.total_18 > 0) ||
-          (this.state.ages.includes(FORTYFIVE) && this.state.total_45 > 0)
-        )
-      ) {
-        fetch(sessions + this.state.selectedDistrict + "&date=" + today)
-          .then((response) => response.json())
-          .then((data) => {
-            this.checkAvailability(data);
-          });
-      }
-    }, 10 * 1000);
+    if (!this.state.start) {
+      this.state.intervalId = this.fetch(today);
+    } else {
+      setInterval(() => {
+        if (
+          !(
+            (this.state.ages.includes(EIGHTEEN) && this.state.total_18 > 0) ||
+            (this.state.ages.includes(FORTYFIVE) && this.state.total_45 > 0)
+          ) &&
+          this.state.selectedDistrict.length > 0
+        ) {
+          this.state.intervalId = this.fetch(today);
+        }
+      }, 10 * 1000);
+    }
   };
 
   onStateChange = (event) => {
     this.setState(
-      { selectedState: event.target.value, finalCenters: [] },
+      {
+        selectedState: event.target.value,
+        finalCenters: [],
+        selectedDistrict: "",
+      },
       this.getDistricts
     );
+
+    this.state.intervalId && clearInterval(this.state.intervalId);
   };
 
   onDistrictChange = (event) => {
     this.setState(
-      { selectedDistrict: event.target.value, finalCenters: [] },
+      {
+        selectedDistrict: event.target.value,
+        finalCenters: [],
+      },
       this.getSessions
     );
+
+    this.state.intervalId && clearInterval(this.state.intervalId);
   };
 
   playBeep = () => {
@@ -140,6 +161,10 @@ class Request extends Component {
         this.close();
       };
     }
+  };
+
+  start = () => {
+    this.setState({ start: true }, this.getSessions);
   };
 
   render() {
@@ -182,7 +207,7 @@ class Request extends Component {
               value={this.state.selectedState}
               onChange={this.onStateChange}
             >
-              <option>-------SELECT A STATE-------</option>
+              <option selected>-------SELECT A STATE-------</option>
               {this.state.states.states.map((state) => renderState(state))}
             </select>
           )}
@@ -198,7 +223,7 @@ class Request extends Component {
                   value={this.state.selectedDistrict}
                   onChange={this.onDistrictChange}
                 >
-                  <option>-------SELECT A DISTRICT-------</option>
+                  <option selected>-------SELECT A DISTRICT-------</option>
                   {this.state.districts.districts.map((district) =>
                     renderDistrict(district)
                   )}
@@ -210,10 +235,18 @@ class Request extends Component {
           {renderCheckboxWithLabel(age1)}
           {renderCheckboxWithLabel(age2)}
         </p>
+        {this.state.ages && (
+          <p>
+            <button type="button" onClick={this.start}>
+              {this.state.start ? "Notifier Started" : "Start Notifier"}
+            </button>
+          </p>
+        )}
         <p>
-          {this.state.finalCenters && (
-            <Report finalCenters={this.state.finalCenters} />
-          )}
+          {this.state.finalCenters &&
+            this.state.selectedDistrict.length > 0 && (
+              <Report finalCenters={this.state.finalCenters} />
+            )}
         </p>
       </div>
     );
