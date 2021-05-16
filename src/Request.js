@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Report } from "./Report";
-import { Spinner } from "react-bootstrap";
+import Loader from "react-loader-spinner";
 
 const states = `https://cdn-api.co-vin.in/api/v2/admin/location/states`;
 const districts = `https://cdn-api.co-vin.in/api/v2/admin/location/districts/`;
@@ -259,7 +259,7 @@ class Request extends Component {
             )}
         </p>
         <p>
-        <label>Age </label>
+          <label>Age </label>
 
           {renderCheckboxWithLabel(age1)}
           {renderCheckboxWithLabel(age2)}
@@ -279,9 +279,31 @@ class Request extends Component {
         )}
         <p>
           {this.state.loading ? (
-            <Spinner animation="border" role="status">
-              <span>Loading...</span>
-            </Spinner>
+            <Loader
+              type="Bars"
+              color="#00BFFF"
+              height={100}
+              width={100}
+              timeout={3000} //3 secs
+            />
+          ) : this.state.selectedDistrict &&
+            this.state.selectedDistrict.length > 0 &&
+            (!this.state.finalCenters ||
+              (this.state.finalCenters &&
+                this.state.finalCenters.length === 0)) ? (
+            this.state.start ? (
+              <div>
+                <label>Waiting for a slot to be available</label>
+                <Loader
+                  type="Bars"
+                  color="#00BFFF"
+                  height={100}
+                  width={100}
+                />
+              </div>
+            ) : (
+              <label>No slots available</label>
+            )
           ) : (
             this.state.finalCenters &&
             this.state.selectedDistrict.length > 0 && (
