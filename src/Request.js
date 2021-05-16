@@ -176,15 +176,20 @@ class Request extends Component {
     if (Notification.permission !== "granted") Notification.requestPermission();
     else {
       this.playBeep();
-      const notification = new Notification(notifTitle, {
-        icon:
-          "https://socoemergency.org/wp-content/uploads/2020/11/icon-vaccine.png",
-        body: notifBody,
-      });
-      notification.onclick = function () {
-        window.focus();
-        this.close();
-      };
+      try {
+        const notification = new Notification(notifTitle, {
+          icon:
+            "https://socoemergency.org/wp-content/uploads/2020/11/icon-vaccine.png",
+          body: notifBody,
+        });
+      } catch (e) {}
+
+      notification
+        ? (notification.onclick = function () {
+            window.focus();
+            this.close();
+          })
+        : null;
     }
   };
 
@@ -294,12 +299,7 @@ class Request extends Component {
             this.state.start ? (
               <div>
                 <label>Waiting for a slot to be available</label>
-                <Loader
-                  type="Bars"
-                  color="#00BFFF"
-                  height={100}
-                  width={100}
-                />
+                <Loader type="Bars" color="#00BFFF" height={100} width={100} />
               </div>
             ) : (
               <label>No slots available</label>
