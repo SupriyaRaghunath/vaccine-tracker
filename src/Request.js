@@ -66,6 +66,10 @@ class Request extends Component {
       total_45 += availability_45;
     }
 
+    _finalCenters = _finalCenters.sort((a, b) => {
+      return (b.availability_18 || b.availability_45) - (a.availability_45 || a.availability_18)
+		});
+
     if (_finalCenters.length) {
       this.notifyMe();
       this.setState({ finalCenters: _finalCenters, total_18, total_45 });
@@ -140,6 +144,7 @@ class Request extends Component {
   };
 
   notifyMe = () => {
+    if(!this.state.start) return
     let notifTitle = "Slots Available",
       notifBody = "Vaccine Slots are avilable. Hurry up!";
 
