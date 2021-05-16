@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Report } from "./Report";
+import { Spinner } from "react-bootstrap";
 
 const states = `https://cdn-api.co-vin.in/api/v2/admin/location/states`;
 const districts = `https://cdn-api.co-vin.in/api/v2/admin/location/districts/`;
@@ -32,10 +33,14 @@ class Request extends Component {
       });
   };
 
-  checkAvailability = (data) => {
+  checkAvailability = () => {
     let _finalCenters = [],
       total_18 = 0,
       total_45 = 0;
+
+    let data = this.state.response;
+
+    if (!data) return;
 
     for (let center of data.centers) {
       let centerData = {
@@ -67,14 +72,22 @@ class Request extends Component {
     }
 
     _finalCenters = _finalCenters.sort((a, b) => {
-      return (b.availability_18 || b.availability_45) - (a.availability_45 || a.availability_18)
-		});
+      return (
+        (b.availability_18 || b.availability_45) -
+        (a.availability_45 || a.availability_18)
+      );
+    });
 
     if (_finalCenters.length) {
       this.notifyMe();
-      this.setState({ finalCenters: _finalCenters, total_18, total_45 });
+      this.setState({
+        finalCenters: _finalCenters,
+        total_18,
+        total_45,
+        loading: false,
+      });
     } else {
-      this.setState({ finalCenters: null });
+      this.setState({ finalCenters: null, loading: false });
     }
   };
 
@@ -82,7 +95,8 @@ class Request extends Component {
     fetch(sessions + this.state.selectedDistrict + "&date=" + today)
       .then((response) => response.json())
       .then((data) => {
-        this.checkAvailability(data);
+        this.state.response = data;
+        this.checkAvailability();
       });
   };
 
@@ -95,12 +109,13 @@ class Request extends Component {
     today = dd + "-" + mm + "-" + yyyy;
 
     if (!this.state.start) {
-      this.state.intervalId = this.fetch(today);
+      this.setState({ loading: true });
+      this.fetch(today);
     } else {
       let notifyTimer = setInterval(() => {
-        if(!this.state.start){
-          clearInterval(notifyTimer)
-          return
+        if (!this.state.start) {
+          clearInterval(notifyTimer);
+          return;
         }
 
         if (
@@ -149,7 +164,7 @@ class Request extends Component {
   };
 
   notifyMe = () => {
-    if(!this.state.start) return
+    if (!this.state.start) return;
     let notifTitle = "Slots Available",
       notifBody = "Vaccine Slots are avilable. Hurry up!";
 
@@ -162,7 +177,8 @@ class Request extends Component {
     else {
       this.playBeep();
       const notification = new Notification(notifTitle, {
-        icon: "https://socoemergency.org/wp-content/uploads/2020/11/icon-vaccine.png",
+        icon:
+          "https://socoemergency.org/wp-content/uploads/2020/11/icon-vaccine.png",
         body: notifBody,
       });
       notification.onclick = function () {
@@ -197,13 +213,11 @@ class Request extends Component {
           type="checkbox"
           id={age}
           onChange={(event) => {
-            event.target.checked
-              ? this.setState({ ages: this.state.ages.concat(event.target.id) })
-              : this.setState({
-                  ages: this.state.ages.filter(
-                    (key) => key !== event.target.id
-                  ),
-                });
+            this.state.ages = event.target.checked
+              ? this.state.ages.concat(event.target.id)
+              : this.state.ages.filter((key) => key !== event.target.id);
+
+            this.checkAvailability();
           }}
           defaultChecked
         />
@@ -214,7 +228,7 @@ class Request extends Component {
     return (
       <div>
         <p>
-          <label>Select State </label>
+          <label>State </label>
           {this.state && this.state.states && (
             <select
               value={this.state.selectedState}
@@ -231,7 +245,7 @@ class Request extends Component {
             this.state.districts &&
             this.state.districts.districts && (
               <div>
-                <label>Select district </label>
+                <label>District </label>
                 <select
                   value={this.state.selectedDistrict}
                   onChange={this.onDistrictChange}
@@ -245,10 +259,12 @@ class Request extends Component {
             )}
         </p>
         <p>
+        <label>Age </label>
+
           {renderCheckboxWithLabel(age1)}
           {renderCheckboxWithLabel(age2)}
         </p>
-        {this.state.ages && (
+        {this.state.ages && this.state.selectedDistrict && (
           <p>
             {this.state.start ? (
               <button type="button" onClick={this.stop}>
@@ -262,10 +278,16 @@ class Request extends Component {
           </p>
         )}
         <p>
-          {this.state.finalCenters &&
+          {this.state.loading ? (
+            <Spinner animation="border" role="status">
+              <span>Loading...</span>
+            </Spinner>
+          ) : (
+            this.state.finalCenters &&
             this.state.selectedDistrict.length > 0 && (
               <Report finalCenters={this.state.finalCenters} />
-            )}
+            )
+          )}
         </p>
       </div>
     );
