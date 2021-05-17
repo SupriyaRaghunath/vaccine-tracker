@@ -187,12 +187,13 @@ class Request extends Component {
       notifBody = "Vaccine Slots are avilable. Hurry up!";
 
     this.playBeep();
-    if (("Notification" in window) && !Notification) {
-      alert("Desktop notifications not available in your browser");
+
+    if (!("Notification" in window) || !Notification) {
+      alert("Desktop notifications are not available in your browser");
       return;
     }
 
-    if (("Notification" in window) && Notification.permission !== "granted") Notification.requestPermission();
+    if (Notification.permission !== "granted") Notification.requestPermission();
     else {
       try {
         const notification = new Notification(notifTitle, {
