@@ -3,6 +3,7 @@ import { Report } from "./Report";
 import Loader from "react-loader-spinner";
 import tone from "./tone.mp3";
 import MuteButton from "./MuteButton";
+import SelectInterval from './SelectInterval'
 
 const states = `https://cdn-api.co-vin.in/api/v2/admin/location/states`;
 const districts = `https://cdn-api.co-vin.in/api/v2/admin/location/districts/`;
@@ -23,6 +24,7 @@ class Request extends Component {
       doses: ["1", "2"],
       start: false,
       mute: false,
+      interval: 10
     };
   }
 
@@ -138,7 +140,7 @@ class Request extends Component {
         ) {
           this.state.intervalId = this.fetch(today);
         }
-      }, 10 * 1000);
+      }, this.state.interval * 1000);
     }
   };
 
@@ -218,6 +220,10 @@ class Request extends Component {
   stop = () => {
     this.setState({ start: false });
   };
+
+  onIntervalSelect = (event) => {
+    this.setState({interval: event.target.value})
+  }
 
   render() {
     let renderState = (state) => {
@@ -352,6 +358,7 @@ class Request extends Component {
             )
           )}
         </p>
+        <SelectInterval interval={this.state.interval} onIntervalSelect={this.onIntervalSelect}/>
       </div>
     );
   }
