@@ -3,7 +3,6 @@ import React from "react";
 function SelectInterval(props) {
   let { onIntervalSelect, interval } = props;
   let intervals = [
-    { label: "2 secs", value: 2 },
     { label: "5 secs", value: 5 },
     { label: "10 secs", value: 10 },
     { label: "20 secs", value: 20 },
@@ -19,7 +18,7 @@ function SelectInterval(props) {
 
   return (
     <p>
-      <label>Time between each requests</label>
+      <label>Check status every </label>
       {
         <select value={interval} onChange={onIntervalSelect}>
           {intervals.map((interval) => renderInterval(interval))}
