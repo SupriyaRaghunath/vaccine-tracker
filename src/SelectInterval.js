@@ -18,7 +18,7 @@ function SelectInterval(props) {
 
   return (
     <p>
-      <label>Check status every </label>
+      <label>Check slots every </label>
       {
         <select value={interval} onChange={onIntervalSelect}>
           {intervals.map((interval) => renderInterval(interval))}
