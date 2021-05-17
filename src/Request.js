@@ -316,6 +316,7 @@ class Request extends Component {
           <br />
           {renderDoseCheckboxWithLabel(2)}
         </p>
+        <SelectInterval interval={this.state.interval} onIntervalSelect={this.onIntervalSelect}/>
         {this.state.ages && this.state.selectedDistrict && (
           <p>
             {this.state.start ? (
@@ -358,7 +359,6 @@ class Request extends Component {
             )
           )}
         </p>
-        <SelectInterval interval={this.state.interval} onIntervalSelect={this.onIntervalSelect}/>
       </div>
     );
   }
