@@ -169,8 +169,11 @@ class Request extends Component {
 
   playBeep = async () => {
     if (!this.state.mute) {
-      var Tone = new Audio(tone);
-      await Tone.play();
+      try {
+        var Tone = new Audio(tone);
+        
+        Tone.play();
+      } catch (err) {}
     }
   };
 
