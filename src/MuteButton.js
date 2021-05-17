@@ -9,8 +9,8 @@ function MuteButton(props) {
 		<div className="sound">
 			<button style={{backgroundColor: '#282c34'}} onClick={onClick} >
                 {!mute?
-                <VscUnmute size={40} color={"white"}/>:
-                <VscMute size={40} color={"white"}/>
+                <VscUnmute size={25} color={"white"}/>:
+                <VscMute size={25} color={"white"}/>
                 }
 			</button>
 		</div>

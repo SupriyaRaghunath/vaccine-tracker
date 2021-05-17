@@ -171,8 +171,8 @@ class Request extends Component {
     if (!this.state.mute) {
       try {
         var Tone = new Audio(tone);
-        
-        Tone.play();
+
+        await Tone.play()
       } catch (err) {}
     }
   };
