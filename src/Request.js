@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Report } from "./Report";
 import Loader from "react-loader-spinner";
-import tone from './tone.mp3'
+import tone from "./tone.mp3";
 
 const states = `https://cdn-api.co-vin.in/api/v2/admin/location/states`;
 const districts = `https://cdn-api.co-vin.in/api/v2/admin/location/districts/`;
@@ -19,6 +19,7 @@ class Request extends Component {
     super(props);
     this.state = {
       ages: ["18", "45"],
+      doses: ["1", "2"],
       start: false,
     };
   }
@@ -57,7 +58,11 @@ class Request extends Component {
 
       for (let session of center.sessions) {
         if (session.available_capacity > 0) {
-          if (this.state.ages.includes(`${session.min_age_limit}`)) {
+          if (
+            this.state.ages.includes(`${session.min_age_limit}`) &&
+            (session[`available_capacity_dose${this.state.doses[0]}`] ||
+              session[`available_capacity_dose${this.state.doses[1]}`])
+          ) {
             if (session.min_age_limit === EIGHTEEN) {
               centerData["availability_18"] =
                 availability_18 + session.available_capacity;
@@ -161,8 +166,8 @@ class Request extends Component {
   };
 
   playBeep = () => {
-    var Tone= new Audio(tone);
-    Tone.play()
+    var Tone = new Audio(tone);
+    Tone.play();
   };
 
   notifyMe = () => {
@@ -211,7 +216,7 @@ class Request extends Component {
       );
     };
 
-    let renderCheckboxWithLabel = (age) => (
+    let renderAgeCheckboxWithLabel = (age) => (
       <label>
         <input
           type="checkbox"
@@ -226,6 +231,24 @@ class Request extends Component {
           defaultChecked
         />
         {age}
+      </label>
+    );
+
+    let renderDoseCheckboxWithLabel = (dose) => (
+      <label>
+        <input
+          type="checkbox"
+          id={dose}
+          onChange={(event) => {
+            this.state.doses = event.target.checked
+              ? this.state.doses.concat(event.target.id)
+              : this.state.doses.filter((key) => key !== event.target.id);
+
+            this.checkAvailability();
+          }}
+          defaultChecked
+        />
+        {`Dose ` + dose}
       </label>
     );
 
@@ -264,9 +287,13 @@ class Request extends Component {
         </p>
         <p>
           <label>Age </label>
-
-          {renderCheckboxWithLabel(age1)}
-          {renderCheckboxWithLabel(age2)}
+          {renderAgeCheckboxWithLabel(age1)}
+          {renderAgeCheckboxWithLabel(age2)}
+        </p>
+        <p>
+          {renderDoseCheckboxWithLabel(1)}
+          <br/>
+          {renderDoseCheckboxWithLabel(2)}
         </p>
         {this.state.ages && this.state.selectedDistrict && (
           <p>
