@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Report } from "./Report";
 import Loader from "react-loader-spinner";
 import tone from "./tone.mp3";
-import MuteButton from './MuteButton'
+import MuteButton from "./MuteButton";
 
 const states = `https://cdn-api.co-vin.in/api/v2/admin/location/states`;
 const districts = `https://cdn-api.co-vin.in/api/v2/admin/location/districts/`;
@@ -22,7 +22,7 @@ class Request extends Component {
       ages: ["18", "45"],
       doses: ["1", "2"],
       start: false,
-      mute: false
+      mute: false,
     };
   }
 
@@ -168,15 +168,15 @@ class Request extends Component {
   };
 
   playBeep = () => {
-    if(!this.state.mute){
+    if (!this.state.mute) {
       var Tone = new Audio(tone);
       Tone.play();
     }
   };
 
   soundPress = () => {
-    this.setState({mute: !this.state.mute})
-  }
+    this.setState({ mute: !this.state.mute });
+  };
 
   notifyMe = () => {
     if (!this.state.start) return;
@@ -189,10 +189,7 @@ class Request extends Component {
       return;
     }
 
-    if (Notification.permission !== "granted"){
-      alert("Please enable Notification!")
-      Notification.requestPermission()
-    }
+    if (Notification.permission !== "granted") Notification.requestPermission();
     else {
       try {
         const notification = new Notification(notifTitle, {
@@ -209,6 +206,8 @@ class Request extends Component {
   };
 
   start = () => {
+    alert("Please keep notifications enabled");
+
     this.setState({ start: true }, this.getSessions);
   };
 
@@ -265,7 +264,7 @@ class Request extends Component {
 
     return (
       <div>
-        <MuteButton mute={this.state.mute} onClick={this.soundPress}/>
+        <MuteButton mute={this.state.mute} onClick={this.soundPress} />
         <p>
           <label>State </label>
           {this.state && this.state.states && (
@@ -304,7 +303,7 @@ class Request extends Component {
         </p>
         <p>
           {renderDoseCheckboxWithLabel(1)}
-          <br/>
+          <br />
           {renderDoseCheckboxWithLabel(2)}
         </p>
         {this.state.ages && this.state.selectedDistrict && (
