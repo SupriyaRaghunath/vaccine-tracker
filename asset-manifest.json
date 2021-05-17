@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/vaccine-slot-tracker/static/css/main.c87a4735.chunk.css",
+    "main.js": "/vaccine-slot-tracker/static/js/main.3bd4ddcd.chunk.js",
+    "main.js.map": "/vaccine-slot-tracker/static/js/main.3bd4ddcd.chunk.js.map",
+    "runtime-main.js": "/vaccine-slot-tracker/static/js/runtime-main.c0c45cd1.js",
+    "runtime-main.js.map": "/vaccine-slot-tracker/static/js/runtime-main.c0c45cd1.js.map",
+    "static/js/2.91337ccd.chunk.js": "/vaccine-slot-tracker/static/js/2.91337ccd.chunk.js",
+    "static/js/2.91337ccd.chunk.js.map": "/vaccine-slot-tracker/static/js/2.91337ccd.chunk.js.map",
+    "static/js/3.c10dff46.chunk.js": "/vaccine-slot-tracker/static/js/3.c10dff46.chunk.js",
+    "static/js/3.c10dff46.chunk.js.map": "/vaccine-slot-tracker/static/js/3.c10dff46.chunk.js.map",
+    "index.html": "/vaccine-slot-tracker/index.html",
+    "static/css/main.c87a4735.chunk.css.map": "/vaccine-slot-tracker/static/css/main.c87a4735.chunk.css.map",
+    "static/js/2.91337ccd.chunk.js.LICENSE.txt": "/vaccine-slot-tracker/static/js/2.91337ccd.chunk.js.LICENSE.txt",
+    "static/media/tone.e69db03d.mp3": "/vaccine-slot-tracker/static/media/tone.e69db03d.mp3"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c0c45cd1.js",
+    "static/js/2.91337ccd.chunk.js",
+    "static/css/main.c87a4735.chunk.css",
+    "static/js/main.3bd4ddcd.chunk.js"
+  ]
+}
