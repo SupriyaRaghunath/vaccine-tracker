@@ -4,10 +4,26 @@ import { Request } from "./Request";
 /**  @author supriya <supriya.raghunath96@gmail.com> */
 /**  @author Sahil Hussain <sahil.hussain113@gmail.com> */
 
+import { GoMarkGithub } from "react-icons/go";
+
 class App extends Component {
   render() {
     return (
       <div className="App">
+        <a
+          href="https://github.com/SupriyaRaghunath/vaccine-tracker"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            position: "absolute",
+            right: 5,
+            bottom: 5,
+            margin: 5,
+          }}
+        >
+          <GoMarkGithub size={50} color={"white"} />
+        </a>
+
         <header className="App-header">
           <h1>Vaccine Slot Tracker</h1>
           <p>
