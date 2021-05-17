@@ -167,10 +167,10 @@ class Request extends Component {
     this.state.intervalId && clearInterval(this.state.intervalId);
   };
 
-  playBeep = () => {
+  playBeep = async () => {
     if (!this.state.mute) {
       var Tone = new Audio(tone);
-      Tone.play();
+      await Tone.play();
     }
   };
 
