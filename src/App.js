@@ -5,6 +5,7 @@ import { Request } from "./Request";
 /**  @author Sahil Hussain <sahil.hussain113@gmail.com> */
 
 import { GoMarkGithub } from "react-icons/go";
+import { GiHelp } from "react-icons/gi";
 
 class App extends Component {
   render() {
@@ -26,18 +27,19 @@ class App extends Component {
           <p>
             <Request />
           </p>
+          <div className="rightlogosection">
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLScI3Ai-FIVnh1mocN16O56hz_Bd39O2YDxQDeKcIz5Vk_8jWw/viewform" className="rightlogo">
+            <GiHelp size={20} color={"white"} />
+          </a>
           <a
             href="https://github.com/SupriyaRaghunath/vaccine-tracker"
             target="_blank"
             rel="noopener noreferrer"
-            style={{
-              right: 5,
-              bottom: 5,
-              margin: 5,
-            }}
+            className="rightlogo"
           >
-            <GoMarkGithub size={50} color={"white"} />
+            <GoMarkGithub size={20} color={"white"} />
           </a>
+          </div>
         </header>
       </div>
     );

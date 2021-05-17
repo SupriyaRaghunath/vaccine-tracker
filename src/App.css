@@ -13,6 +13,24 @@
   }
 }
 
+.sound {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin:30px;
+}
+
+.rightlogosection {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px;
+}
+
+.rightlogo {
+  margin: 10px;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
