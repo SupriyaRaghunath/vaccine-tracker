@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 
+/**  @author Supriya PR <supriya.raghunath96@gmail.com> */
+/**  @author Sahil Hussain <sahil.hussain113@gmail.com> */
+
 class Report extends Component {
   renderTableData = () => {
     let arr = this.props.finalCenters.map((center) => {

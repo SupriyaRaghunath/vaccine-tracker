@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Report } from "./Report";
 import Loader from "react-loader-spinner";
-import tone from './tone.mp3'
+import tone from "./tone.mp3";
 
 const states = `https://cdn-api.co-vin.in/api/v2/admin/location/states`;
 const districts = `https://cdn-api.co-vin.in/api/v2/admin/location/districts/`;
@@ -11,11 +11,15 @@ const age2 = "45";
 const EIGHTEEN = 18;
 const FORTYFIVE = 45;
 
+/**  @author Supriya PR <supriya.raghunath96@gmail.com> */
+/**  @author Sahil Hussain <sahil.hussain113@gmail.com> */
+
 class Request extends Component {
   constructor(props) {
     super(props);
     this.state = {
       ages: ["18", "45"],
+      doses: ["1", "2"],
       start: false,
     };
   }
@@ -54,7 +58,11 @@ class Request extends Component {
 
       for (let session of center.sessions) {
         if (session.available_capacity > 0) {
-          if (this.state.ages.includes(`${session.min_age_limit}`)) {
+          if (
+            this.state.ages.includes(`${session.min_age_limit}`) &&
+            (session[`available_capacity_dose${this.state.doses[0]}`] ||
+              session[`available_capacity_dose${this.state.doses[1]}`])
+          ) {
             if (session.min_age_limit === EIGHTEEN) {
               centerData["availability_18"] =
                 availability_18 + session.available_capacity;
@@ -158,8 +166,8 @@ class Request extends Component {
   };
 
   playBeep = () => {
-    var Tone= new Audio(tone);
-    Tone.play()
+    var Tone = new Audio(tone);
+    Tone.play();
   };
 
   notifyMe = () => {
@@ -175,15 +183,17 @@ class Request extends Component {
     if (Notification.permission !== "granted") Notification.requestPermission();
     else {
       this.playBeep();
-      const notification = new Notification(notifTitle, {
-        icon:
-          "https://socoemergency.org/wp-content/uploads/2020/11/icon-vaccine.png",
-        body: notifBody,
-      });
-      notification.onclick = function () {
-        window.focus();
-        this.close();
-      };
+      try {
+        const notification = new Notification(notifTitle, {
+          icon:
+            "https://socoemergency.org/wp-content/uploads/2020/11/icon-vaccine.png",
+          body: notifBody,
+        });
+        notification.onclick = function () {
+          window.focus();
+          this.close();
+        };
+      } catch (e) {}
     }
   };
 
@@ -206,7 +216,7 @@ class Request extends Component {
       );
     };
 
-    let renderCheckboxWithLabel = (age) => (
+    let renderAgeCheckboxWithLabel = (age) => (
       <label>
         <input
           type="checkbox"
@@ -221,6 +231,24 @@ class Request extends Component {
           defaultChecked
         />
         {age}
+      </label>
+    );
+
+    let renderDoseCheckboxWithLabel = (dose) => (
+      <label>
+        <input
+          type="checkbox"
+          id={dose}
+          onChange={(event) => {
+            this.state.doses = event.target.checked
+              ? this.state.doses.concat(event.target.id)
+              : this.state.doses.filter((key) => key !== event.target.id);
+
+            this.checkAvailability();
+          }}
+          defaultChecked
+        />
+        {`Dose ` + dose}
       </label>
     );
 
@@ -259,9 +287,13 @@ class Request extends Component {
         </p>
         <p>
           <label>Age </label>
-
-          {renderCheckboxWithLabel(age1)}
-          {renderCheckboxWithLabel(age2)}
+          {renderAgeCheckboxWithLabel(age1)}
+          {renderAgeCheckboxWithLabel(age2)}
+        </p>
+        <p>
+          {renderDoseCheckboxWithLabel(1)}
+          <br/>
+          {renderDoseCheckboxWithLabel(2)}
         </p>
         {this.state.ages && this.state.selectedDistrict && (
           <p>
@@ -293,12 +325,7 @@ class Request extends Component {
             this.state.start ? (
               <div>
                 <label>Waiting for a slot to be available</label>
-                <Loader
-                  type="Bars"
-                  color="#00BFFF"
-                  height={100}
-                  width={100}
-                />
+                <Loader type="Bars" color="#00BFFF" height={100} width={100} />
               </div>
             ) : (
               <label>No slots available</label>
