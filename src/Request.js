@@ -107,6 +107,7 @@ class Request extends Component {
         total_18,
         total_45,
         loading: false,
+        pauseNotification: false,
       });
     } else {
       this.setState({ finalCenters: null, loading: false });
@@ -183,7 +184,7 @@ class Request extends Component {
       try {
         var Tone = new Audio(tone);
 
-        await Tone.play()
+        await Tone.play();
       } catch (err) {}
     }
   };
@@ -235,8 +236,8 @@ class Request extends Component {
   };
 
   onIntervalSelect = (event) => {
-    this.setState({interval: event.target.value})
-  }
+    this.setState({ interval: event.target.value });
+  };
 
   render() {
     let renderState = (state) => {
