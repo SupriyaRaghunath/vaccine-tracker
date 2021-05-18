@@ -15,8 +15,10 @@ class App extends Component {
     let { appTitle, findSlot, startNotifier } = STRINGS;
     let { FORM, GIT } = URL;
 
-    let feedback = <GiHelp className="right-logo" />;
-    let gitButton = <GoMarkGithub className="right-logo" />;
+    let hrefs = {
+      [FORM]: <GiHelp className="right-logo" />,
+      [GIT]: <GoMarkGithub className="right-logo" />,
+    };
 
     let renderHref = (child, url) => (
       <a
@@ -44,8 +46,7 @@ class App extends Component {
             <Request />
           </p>
           <div className="right-logo-section">
-            {renderHref(feedback, FORM)}
-            {renderHref(gitButton, GIT)}
+            {Object.keys(hrefs).map((url) => renderHref(hrefs[url], url))}
           </div>
         </body>
       </div>
