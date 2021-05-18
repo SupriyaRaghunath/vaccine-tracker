@@ -3,13 +3,13 @@ import React from "react";
 function SelectInterval(props) {
   let { onIntervalSelect, interval } = props;
   let intervals = [
-    { label: "5 secs", value: 5 },
-    { label: "10 secs", value: 10 },
-    { label: "20 secs", value: 20 },
-    { label: "30 secs", value: 30 },
-    { label: "1 mins", value: 60 },
-    { label: "2 mins", value: 120 },
-    { label: "5 mins", value: 300 },
+    { label: "5s", value: 5 },
+    { label: "10s", value: 10 },
+    { label: "20s", value: 20 },
+    { label: "30s", value: 30 },
+    { label: "1m", value: 60 },
+    { label: "2m", value: 120 },
+    { label: "5m", value: 300 },
   ];
 
   let renderInterval = (interval) => (

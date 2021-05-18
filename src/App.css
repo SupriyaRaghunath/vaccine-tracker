@@ -13,25 +13,30 @@
   }
 }
 
-.sound {
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin:30px;
-}
-
-.rightlogosection {
+.right-logo-section {
   position: absolute;
   top: 0;
   right: 0;
   margin: 10px;
 }
 
-.rightlogo {
-  margin: 10px;
+.right-logo {
+  margin: 5px;
+  size: 20;
+  color: white;
 }
 
 .App-header {
+  background-color: #282c34;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-body {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -44,6 +49,16 @@
 
 .App-link {
   color: #61dafb;
+}
+
+.find-slot {
+  font-weight: 75;
+  font-size: 20;
+}
+
+.start-notifier {
+  font-weight: 10;
+  font-size: 20;
 }
 
 @keyframes App-logo-spin {

@@ -3,7 +3,7 @@ import { Report } from "./Report";
 import Loader from "react-loader-spinner";
 import tone from "./tone.mp3";
 import MuteButton from "./MuteButton";
-import SelectInterval from './SelectInterval'
+import SelectInterval from "./SelectInterval";
 
 const states = `https://cdn-api.co-vin.in/api/v2/admin/location/states`;
 const districts = `https://cdn-api.co-vin.in/api/v2/admin/location/districts/`;
@@ -24,7 +24,8 @@ class Request extends Component {
       doses: ["1", "2"],
       start: false,
       mute: false,
-      interval: 10
+      interval: 10,
+      pauseNotification: false,
     };
   }
 
@@ -92,12 +93,21 @@ class Request extends Component {
     });
 
     if (_finalCenters.length) {
+      if (this.state.pauseNotification) {
+        if (
+          JSON.stringify(_finalCenters) ===
+          JSON.stringify(this.state.finalCenters)
+        )
+          return;
+      }
+
       this.notifyMe();
       this.setState({
         finalCenters: _finalCenters,
         total_18,
         total_45,
         loading: false,
+        pauseNotification: false,
       });
     } else {
       this.setState({ finalCenters: null, loading: false });
@@ -174,7 +184,7 @@ class Request extends Component {
       try {
         var Tone = new Audio(tone);
 
-        await Tone.play()
+        await Tone.play();
       } catch (err) {}
     }
   };
@@ -211,6 +221,10 @@ class Request extends Component {
     }
   };
 
+  pauseNotification = () => {
+    this.setState({ pauseNotification: !this.state.pauseNotification });
+  };
+
   start = () => {
     alert("Please keep notifications enabled");
 
@@ -222,8 +236,8 @@ class Request extends Component {
   };
 
   onIntervalSelect = (event) => {
-    this.setState({interval: event.target.value})
-  }
+    this.setState({ interval: event.target.value });
+  };
 
   render() {
     let renderState = (state) => {
@@ -274,7 +288,6 @@ class Request extends Component {
 
     return (
       <div>
-        <MuteButton mute={this.state.mute} onClick={this.soundPress} />
         <p>
           <label>State </label>
           {this.state && this.state.states && (
@@ -316,7 +329,11 @@ class Request extends Component {
           <br />
           {renderDoseCheckboxWithLabel(2)}
         </p>
-        <SelectInterval interval={this.state.interval} onIntervalSelect={this.onIntervalSelect}/>
+        <MuteButton mute={this.state.mute} onClick={this.soundPress} />
+        <SelectInterval
+          interval={this.state.interval}
+          onIntervalSelect={this.onIntervalSelect}
+        />
         {this.state.ages && this.state.selectedDistrict && (
           <p>
             {this.state.start ? (
@@ -330,6 +347,17 @@ class Request extends Component {
             )}
           </p>
         )}
+        {this.state.start &&
+          this.state.finalCenters &&
+          this.state.selectedDistrict.length > 0 && (
+            <div>
+              <button type="button" onClick={this.pauseNotification}>
+                {this.state.pauseNotification
+                  ? "Resume Notifications"
+                  : "Pause Notifications and notify for new slots"}
+              </button>
+            </div>
+          )}
         <p>
           {this.state.loading ? (
             <Loader

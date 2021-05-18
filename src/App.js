@@ -1,46 +1,53 @@
 import React, { Component } from "react";
-import "./App.css";
-import { Request } from "./Request";
-/**  @author supriya <supriya.raghunath96@gmail.com> */
-/**  @author Sahil Hussain <sahil.hussain113@gmail.com> */
 
 import { GoMarkGithub } from "react-icons/go";
 import { GiHelp } from "react-icons/gi";
 
+import { STRINGS } from "./strings.js";
+import { URL } from "./url.js";
+
+import { Request } from "./Request";
+
+import "./App.css";
+
 class App extends Component {
   render() {
+    let { appTitle, findSlot, startNotifier } = STRINGS;
+    let { FORM, GIT } = URL;
+
+    let feedback = <GiHelp className="right-logo" />;
+    let gitButton = <GoMarkGithub className="right-logo" />;
+
+    let renderHref = (child, url) => (
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="right-logo"
+      >
+        {child}
+      </a>
+    );
+
     return (
       <div className="App">
         <header className="App-header">
-          <h1>Vaccine Slot Tracker</h1>
+          <h1>{appTitle}</h1>
+        </header>
+        <body className="App-body">
           <p>
-            <label style={{ fontWeight: 75, fontSize: 20 }}>
-              Find available slots for your vaccination. If there are no slots,
-              don't worry! we've got your back. We'll notify when there are
-              available slots.
-            </label>
+            <label className="find-slot">{findSlot}</label>
             <br />
-            <label style={{ fontWeight: 10, fontSize: 20 }}>
-              'Start Notifier' and make sure you don't close this tab.
-            </label>
+            <label className="start-notifier">{startNotifier}</label>
           </p>
           <p>
             <Request />
           </p>
-          <div className="rightlogosection">
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLScI3Ai-FIVnh1mocN16O56hz_Bd39O2YDxQDeKcIz5Vk_8jWw/viewform" className="rightlogo">
-            <GiHelp size={20} color={"white"} />
-          </a>
-          <a
-            href="https://github.com/SupriyaRaghunath/vaccine-tracker"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rightlogo"
-          >
-            <GoMarkGithub size={20} color={"white"} />
-          </a>
+          <div className="right-logo-section">
+            {renderHref(feedback, FORM)}
+            {renderHref(gitButton, GIT)}
           </div>
-        </header>
+        </body>
       </div>
     );
   }
