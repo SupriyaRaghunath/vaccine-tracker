@@ -38,7 +38,7 @@ class App extends Component {
           <p>
             <label className="find-slot">{findSlot}</label>
             <br />
-            <label sclassName="start-notifier">{startNotifier}</label>
+            <label className="start-notifier">{startNotifier}</label>
           </p>
           <p>
             <Request />
