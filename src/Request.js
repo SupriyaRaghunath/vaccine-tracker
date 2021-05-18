@@ -10,6 +10,8 @@ import {
   Label,
   Dropdown,
 } from "./Component.js";
+import "./App.css";
+import Header from "./Header";
 
 import { URL } from "./url.js";
 import { STRINGS } from "./strings.js";
@@ -215,8 +217,7 @@ class Request extends Component {
     else {
       try {
         const notification = new Notification(notifTitle, {
-          icon:
-            "https://socoemergency.org/wp-content/uploads/2020/11/icon-vaccine.png",
+          icon: "https://socoemergency.org/wp-content/uploads/2020/11/icon-vaccine.png",
           body: notifBody,
         });
         notification.onclick = function () {
@@ -306,6 +307,10 @@ class Request extends Component {
 
     return (
       <div>
+        <Header />
+        <div className="left-logo-section">
+          <MuteButton mute={this.state.mute} onClick={this.soundPress} />
+        </div>
         <p>
           <Label title={state_title} />
           {showStates && (
@@ -349,7 +354,6 @@ class Request extends Component {
             id={dose}
           />
         ))}
-        <MuteButton mute={state.mute} onClick={this.soundPress} />
         <SelectInterval
           interval={state.interval}
           onIntervalSelect={this.onIntervalSelect}
@@ -372,6 +376,7 @@ class Request extends Component {
               label={pause_notifications}
             />
           ))}
+        <div className="Align-centre">
         <p>
           {state.loading ? (
             <LoaderContainer />
@@ -391,6 +396,7 @@ class Request extends Component {
             )
           )}
         </p>
+        </div>
       </div>
     );
   }
