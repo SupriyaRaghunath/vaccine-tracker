@@ -13,18 +13,44 @@
   }
 }
 
-.rightlogosection {
+.right-logo-section {
   position: absolute;
   top: 0;
   right: 0;
   margin: 10px;
 }
 
-.rightlogo {
+.right-logo {
+  margin: 5px;
+  size: 20;
+  color: white;
+}
+
+.left-logo-section {
+  position: absolute;
+  top: 0;
+  left: 0;
   margin: 10px;
+  color: bisque;
 }
 
 .App-header {
+  background-color: #282c34;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.Align-centre{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.App-body {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -37,6 +63,16 @@
 
 .App-link {
   color: #61dafb;
+}
+
+.find-slot {
+  font-weight: 75;
+  font-size: 20;
+}
+
+.start-notifier {
+  font-weight: 10;
+  font-size: 20;
 }
 
 @keyframes App-logo-spin {
