@@ -16,6 +16,10 @@ import Header from "./Header";
 import { URL } from "./url.js";
 import { STRINGS } from "./strings.js";
 
+import "./App.css";
+
+import Header from "./Header";
+
 const { STATES, DISTRICTS, SESSIONS } = URL;
 
 const AGES = [18, 45];
