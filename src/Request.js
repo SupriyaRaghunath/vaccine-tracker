@@ -14,6 +14,10 @@ import {
 import { URL } from "./url.js";
 import { STRINGS } from "./strings.js";
 
+import "./App.css";
+
+import Header from "./Header";
+
 const { STATES, DISTRICTS, SESSIONS } = URL;
 
 const AGES = [18, 45];
@@ -346,26 +350,36 @@ class Request extends Component {
       />
     );
 
-    let muteButton = <MuteButton mute={state.mute} onClick={this.soundPress} />;
+    let muteButton = (
+      <div className="left-logo-section">
+        <MuteButton mute={state.mute} onClick={this.soundPress} />
+      </div>
+    );
 
     let notifyButtons =
       showNotifier &&
       (start ? (
         <Button onClick={this.stop} label={STRINGS.stop_notifier} />
       ) : (
-        <Button onClick={this.start} label={STRINGS.tart_notifier} />
+        <Button onClick={this.start} label={STRINGS.start_notifier} />
       ));
 
     let pauseResumeButtons =
       showPauseResume &&
       (state.pauseNotification ? (
-        <Button onClick={this.pauseNotification} label={STRINGS.resume_notifications} />
+        <Button
+          onClick={this.pauseNotification}
+          label={STRINGS.resume_notifications}
+        />
       ) : (
-        <Button onClick={this.pauseNotification} label={STRINGS.pause_notifications} />
+        <Button
+          onClick={this.pauseNotification}
+          label={STRINGS.pause_notifications}
+        />
       ));
 
     let content = (
-      <p>
+      <div className="Align-centre">
         {state.loading ? (
           <LoaderContainer />
         ) : isDistrictSelected && noFinalCenters ? (
@@ -381,11 +395,13 @@ class Request extends Component {
           finalCenters &&
           selectedDistrict.length > 0 && <Report finalCenters={finalCenters} />
         )}
-      </p>
+      </div>
     );
 
     return (
       <div>
+        <Header />
+        {muteButton}
         {stateField}
         {districtField}
         {agesField}
