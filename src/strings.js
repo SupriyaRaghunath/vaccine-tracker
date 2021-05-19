@@ -15,7 +15,11 @@ const STRINGS = {
     resume_notifications:"Resume Notifications",
     pause_notifications:"Pause Notifications and notify for new slots",
    waiting:"Waiting for a slot to be available",
-   no_slot:"No slots available"
+   no_slot:"No slots available",
+   slot_available_title:"Slots Available",
+   slot_available_body:"Slots Available",
+   enable_notif:"Please keep notifications enabled",
+   no_notif_browser:"Desktop notifications are not available in your browser"
 };
 
 export { STRINGS };

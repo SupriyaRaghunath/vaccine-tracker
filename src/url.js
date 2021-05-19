@@ -6,6 +6,8 @@ const URL = {
   DISTRICTS: "https://cdn-api.co-vin.in/api/v2/admin/location/districts/",
   SESSIONS:
     "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=",
+  VACCINE:
+    "https://socoemergency.org/wp-content/uploads/2020/11/icon-vaccine.png",
 };
 
 export { URL };
