@@ -353,7 +353,7 @@ class Request extends Component {
       (start ? (
         <Button onClick={this.stop} label={STRINGS.stop_notifier} />
       ) : (
-        <Button onClick={this.start} label={sSTRINGS.tart_notifier} />
+        <Button onClick={this.start} label={STRINGS.tart_notifier} />
       ));
 
     let pauseResumeButtons =
