@@ -1,5 +1,8 @@
 <header>
-   <h1>Vaccine Slot Tracker</h1>
+   <h1>Vaccine Slot Tracker
+      <img src="https://socoemergency.org/wp-content/uploads/2020/11/icon-vaccine.png" width="30" height="30">
+   </h1>
+   
    <h2>WHAT IS THIS?</h2>
    A Client Side Web Application which continuously checks for a vaccination slot availability on https://www.cowin.gov.in/home based on the filters selected.
    </br>
