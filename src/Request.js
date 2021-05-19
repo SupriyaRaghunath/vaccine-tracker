@@ -10,6 +10,8 @@ import {
   Label,
   Dropdown,
 } from "./Component.js";
+import "./App.css";
+import Header from "./Header";
 
 import { URL } from "./url.js";
 import { STRINGS } from "./strings.js";
@@ -67,9 +69,11 @@ class Request extends Component {
         name: center.name,
         address: center.address,
         pincode: center.pincode,
+        availability_18_d1: 0,
+        availability_45_d1: 0,
+        availability_18_d2: 0,
+        availability_45_d2: 0,
       };
-      let availability_18 = 0,
-        availability_45 = 0;
 
       for (let session of center.sessions) {
         if (session.available_capacity > 0) {
@@ -78,21 +82,36 @@ class Request extends Component {
             (session[`available_capacity_dose${this.state.doses[0]}`] ||
               session[`available_capacity_dose${this.state.doses[1]}`])
           ) {
-            if (session.min_age_limit === AGES[0]) {
-              centerData["availability_18"] =
-                availability_18 + session.available_capacity;
-            } else {
-              centerData["availability_45"] =
-                availability_45 + session.available_capacity;
+            if (session.min_age_limit === AGES[0] && this.state.doses.includes(1)) {
+              centerData["availability_18_d1"] +=
+                session.available_capacity_dose1;
+            }
+            if (session.min_age_limit === AGES[0] && this.state.doses.includes(2)) {
+              centerData["availability_18_d2"] +=
+                session.available_capacity_dose2;
+            }
+            if (session.min_age_limit === AGES[1] && this.state.doses.includes(1)) {
+              centerData["availability_45_d1"] +=
+                session.available_capacity_dose1;
+            }
+            if(session.min_age_limit === AGES[1] && this.state.doses.includes(2)) {
+              centerData["availability_45_d2"] +=
+                session.available_capacity_dose2;
             }
           }
         }
       }
-      if (centerData.availability_18 || centerData.availability_45)
-        _finalCenters.push(centerData);
 
-      total_18 += availability_18;
-      total_45 += availability_45;
+      centerData["availability_45"] =
+          (centerData["availability_45_d1"] + centerData["availability_45_d2"]) || undefined
+      centerData["availability_18"] =
+          (centerData["availability_18_d1"] + centerData["availability_18_d2"]) || undefined
+
+          if (centerData.availability_18 || centerData.availability_45)
+          _finalCenters.push(centerData);
+
+      total_18 += centerData.availability_18;
+      total_45 += centerData.availability_45;
     }
 
     _finalCenters = _finalCenters.sort((a, b) => {
@@ -379,6 +398,7 @@ class Request extends Component {
       ));
 
     let content = (
+      <p>
       <div className="Align-centre">
         {state.loading ? (
           <LoaderContainer />
@@ -396,6 +416,7 @@ class Request extends Component {
           selectedDistrict.length > 0 && <Report finalCenters={finalCenters} />
         )}
       </div>
+      </p>
     );
 
     return (
