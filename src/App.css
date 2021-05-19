@@ -26,6 +26,14 @@
   color: white;
 }
 
+.left-logo-section {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 10px;
+  color: bisque;
+}
+
 .App-header {
   background-color: #282c34;
   display: flex;
@@ -34,6 +42,12 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.Align-centre{
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .App-body {
