@@ -65,9 +65,11 @@ class Request extends Component {
         name: center.name,
         address: center.address,
         pincode: center.pincode,
+        availability_18_d1: 0,
+        availability_45_d1: 0,
+        availability_18_d2: 0,
+        availability_45_d2: 0,
       };
-      let availability_18 = 0,
-        availability_45 = 0;
 
       for (let session of center.sessions) {
         if (session.available_capacity > 0) {
@@ -76,21 +78,36 @@ class Request extends Component {
             (session[`available_capacity_dose${this.state.doses[0]}`] ||
               session[`available_capacity_dose${this.state.doses[1]}`])
           ) {
-            if (session.min_age_limit === AGES[0]) {
-              centerData["availability_18"] =
-                availability_18 + session.available_capacity;
-            } else {
-              centerData["availability_45"] =
-                availability_45 + session.available_capacity;
+            if (session.min_age_limit === AGES[0] && this.state.doses.includes(1)) {
+              centerData["availability_18_d1"] +=
+                session.available_capacity_dose1;
+            }
+            if (session.min_age_limit === AGES[0] && this.state.doses.includes(2)) {
+              centerData["availability_18_d2"] +=
+                session.available_capacity_dose2;
+            }
+            if (session.min_age_limit === AGES[1] && this.state.doses.includes(1)) {
+              centerData["availability_45_d1"] +=
+                session.available_capacity_dose1;
+            }
+            if(session.min_age_limit === AGES[1] && this.state.doses.includes(2)) {
+              centerData["availability_45_d2"] +=
+                session.available_capacity_dose2;
             }
           }
         }
       }
-      if (centerData.availability_18 || centerData.availability_45)
-        _finalCenters.push(centerData);
 
-      total_18 += availability_18;
-      total_45 += availability_45;
+      centerData["availability_45"] =
+          (centerData["availability_45_d1"] + centerData["availability_45_d2"]) || undefined
+      centerData["availability_18"] =
+          (centerData["availability_18_d1"] + centerData["availability_18_d2"]) || undefined
+
+          if (centerData.availability_18 || centerData.availability_45)
+          _finalCenters.push(centerData);
+
+      total_18 += centerData.availability_18;
+      total_45 += centerData.availability_45;
     }
 
     _finalCenters = _finalCenters.sort((a, b) => {
@@ -203,22 +220,20 @@ class Request extends Component {
 
   notifyMe = () => {
     if (!this.state.start) return;
-    let notifTitle = "Slots Available",
-      notifBody = "Vaccine Slots are avilable. Hurry up!";
 
     this.playBeep();
 
     if (!("Notification" in window) || !Notification) {
-      alert("Desktop notifications are not available in your browser");
+      alert(STRINGS.no_notif_browser);
       return;
     }
 
     if (Notification.permission !== "granted") Notification.requestPermission();
     else {
       try {
-        const notification = new Notification(notifTitle, {
-          icon: "https://socoemergency.org/wp-content/uploads/2020/11/icon-vaccine.png",
-          body: notifBody,
+        const notification = new Notification(STRINGS.slot_available_title, {
+          icon: URL.VACCINE,
+          body: STRINGS.slot_available_body,
         });
         notification.onclick = function () {
           window.focus();
@@ -233,7 +248,7 @@ class Request extends Component {
   };
 
   start = () => {
-    alert("Please keep notifications enabled");
+    alert(STRINGS.enable_notif);
 
     this.setState({ start: true }, this.getSessions);
   };
@@ -274,21 +289,6 @@ class Request extends Component {
       ages,
     } = state || {};
 
-    let {
-      state_title,
-      default_state_option,
-      district_title,
-      default_district_option,
-      age_title,
-      dose_title,
-      stop_notifier,
-      start_notifier,
-      resume_notifications,
-      pause_notifications,
-      waiting,
-      no_slot,
-    } = STRINGS;
-
     let showStates = state && states;
     let showDistricts = showStates && districts && districts.districts;
     let showNotifier = ages && selectedDistrict;
@@ -305,98 +305,129 @@ class Request extends Component {
       <option value={district.district_id}>{district.district_name}</option>
     );
 
-    return (
-      <div>
-        <Header />
-        <div className="left-logo-section">
-          <MuteButton mute={this.state.mute} onClick={this.soundPress} />
-        </div>
-        <p>
-          <Label title={state_title} />
-          {showStates && (
-            <Dropdown
-              value={selectedState}
-              onChange={this.onStateChange}
-              renderOption={(data) => renderState(data)}
-              defaultOption={default_state_option}
-              data={states.states}
-            />
-          )}
-        </p>
-        <p>
-          {showDistricts && (
-            <div>
-              <Label title={district_title} />
-              <Dropdown
-                value={selectedDistrict}
-                onChange={this.onDistrictChange}
-                renderOption={(data) => renderDistrict(data)}
-                defaultOption={default_district_option}
-                data={districts.districts}
-              />
-            </div>
-          )}
-        </p>
-        <p>
-          <Label title={age_title} />
-          {AGES.map((age) => (
-            <CheckboxWithLabel
-              onPress={this.onAgeChange}
-              title={`${age}`}
-              id={age}
-            />
-          ))}
-        </p>
+    let stateField = (
+      <p>
+        <Label title={STRINGS.state_title} />
+        {showStates && (
+          <Dropdown
+            value={selectedState}
+            onChange={this.onStateChange}
+            renderOption={(data) => renderState(data)}
+            defaultOption={STRINGS.default_state_option}
+            data={states.states}
+          />
+        )}
+      </p>
+    );
+
+    let districtField = showDistricts && (
+      <p>
+        <Label title={STRINGS.district_title} />
+        <Dropdown
+          value={selectedDistrict}
+          onChange={this.onDistrictChange}
+          renderOption={(data) => renderDistrict(data)}
+          defaultOption={STRINGS.default_district_option}
+          data={districts.districts}
+        />
+      </p>
+    );
+
+    let agesField = (
+      <p>
+        <Label title={STRINGS.age_title} />
+        {AGES.map((age) => (
+          <CheckboxWithLabel
+            onPress={this.onAgeChange}
+            title={`${age}`}
+            id={age}
+          />
+        ))}
+      </p>
+    );
+
+    let dosesField = (
+      <p>
         {DOSES.map((dose) => (
           <CheckboxWithLabel
             onPress={this.onDoseChange}
-            title={dose_title+'' + dose}
+            title={STRINGS.dose_title + "" + dose}
             id={dose}
           />
         ))}
-        <SelectInterval
-          interval={state.interval}
-          onIntervalSelect={this.onIntervalSelect}
+      </p>
+    );
+
+    let interval = (
+      <SelectInterval
+        interval={state.interval}
+        onIntervalSelect={this.onIntervalSelect}
+      />
+    );
+
+    let muteButton = (
+      <div className="left-logo-section">
+        <MuteButton mute={state.mute} onClick={this.soundPress} />
+      </div>
+    );
+
+    let notifyButtons =
+      showNotifier &&
+      (start ? (
+        <Button onClick={this.stop} label={STRINGS.stop_notifier} />
+      ) : (
+        <Button onClick={this.start} label={STRINGS.start_notifier} />
+      ));
+
+    let pauseResumeButtons =
+      showPauseResume &&
+      (state.pauseNotification ? (
+        <Button
+          onClick={this.pauseNotification}
+          label={STRINGS.resume_notifications}
         />
-        {showNotifier &&
-          (start ? (
-            <Button onClick={this.stop} label={stop_notifier} />
+      ) : (
+        <Button
+          onClick={this.pauseNotification}
+          label={STRINGS.pause_notifications}
+        />
+      ));
+
+    let content = (
+      <p>
+      <div className="Align-centre">
+        {state.loading ? (
+          <LoaderContainer />
+        ) : isDistrictSelected && noFinalCenters ? (
+          start ? (
+            <div>
+              <Label title={STRINGS.waiting} />
+              <LoaderContainer />
+            </div>
           ) : (
-            <Button onClick={this.start} label={start_notifier} />
-          ))}
-        {showPauseResume &&
-          (state.pauseNotification ? (
-            <Button
-              onClick={this.pauseNotification}
-              label={resume_notifications}
-            />
-          ) : (
-            <Button
-              onClick={this.pauseNotification}
-              label={pause_notifications}
-            />
-          ))}
-        <div className="Align-centre">
-        <p>
-          {state.loading ? (
-            <LoaderContainer />
-          ) : isDistrictSelected && noFinalCenters ? (
-            start ? (
-              <div>
-                <Label title={waiting} />
-                <LoaderContainer />
-              </div>
-            ) : (
-              <Label title={no_slot} />
-            )
-          ) : (
-            finalCenters &&
-            selectedDistrict.length > 0 && (
-              <Report finalCenters={finalCenters} />
-            )
-          )}
-        </p>
-        </div>
+            <Label title={STRINGS.no_slot} />
+          )
+        ) : (
+          finalCenters &&
+          selectedDistrict.length > 0 && <Report finalCenters={finalCenters} />
+        )}
+      </div>
+      </p>
+    );
+
+    return (
+      <div>
+        <Header />
+        {muteButton}
+        {stateField}
+        {districtField}
+        {agesField}
+        {dosesField}
+        {interval}
+        {muteButton}
+        {notifyButtons}
+        {pauseResumeButtons}
+        {content}
       </div>
     );
   }
